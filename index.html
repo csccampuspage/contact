@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>शानदार ऑफर - अभी क्लेम करें!</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header class="banner">
+        
+    </header>
+
+    <main class="container">
+        <div class="content-box">
+            <h2>Maths और Reasoning का नया बैच-Join करे। </h2>
+            <p class="subheadline">बस नीचे दिया गया फॉर्म भरें और हमारी टीम आपसे संपर्क करेगी। </p>
+            
+            <form id="leadForm">
+                <div class="form-group">
+                    <input type="text" name="Name" placeholder="Your Name" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="Email" placeholder="Email" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="Phone" placeholder="Mobile Number" required>
+                </div>
+                
+                <input type="hidden" name="SecretKey" value="MeraSecretCode123@#$">
+                
+                <button type="submit" class="submit-button" id="submitButton">Submit</button>
+            </form>
+            
+            <div id="responseMessage"></div>
+        </div>
+    </main>
+
+    <script>
+        const form = document.getElementById('leadForm');
+        const submitButton = document.getElementById('submitButton');
+        const responseMessage = document.getElementById('responseMessage');
+
+        // अपनी गूगल एप्स स्क्रिप्ट का वेब ऐप URL यहाँ पेस्ट करें
+        const WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyQ3JZlqQ6-JHKZa1Ekno4DZO_m8mt-gjmYCDeZoOinnI5hALX5EqAGgJoQKNWizUh6_Q/exec'; 
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            submitButton.disabled = true;
+            submitButton.textContent = 'प्रोसेस हो रहा है...';
+            responseMessage.textContent = '';
+
+            const formData = new FormData(form);
+
+            fetch(WEB_APP_URL, {
+                method: 'POST',
+                body: formData
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.result === 'success') {
+                    responseMessage.style.color = 'green';
+                    responseMessage.textContent = 'धन्यवाद! आपका फॉर्म सफलतापूर्वक सबमिट हो गया है।';
+                    form.reset();
+                } else {
+                    responseMessage.style.color = 'red';
+                    responseMessage.textContent = 'त्रुटि: ' + data.message;
+                }
+            })
+            .catch(error => {
+                responseMessage.style.color = 'red';
+                responseMessage.textContent = 'कुछ गलत हुआ! कृपया इंटरनेट कनेक्शन जांचें और पुनः प्रयास करें।';
+                console.error('Error!', error.message);
+            })
+            .finally(() => {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Submit';
+            });
+        });
+    </script>
+
+</body>
+</html>
